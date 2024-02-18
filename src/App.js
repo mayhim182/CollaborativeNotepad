@@ -1,25 +1,53 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+import * as api from './api/routing';
+import { Component } from 'react';
+
+class App extends Component{
+  constructor(){
+    super()
+    this.state = {
+      timestamp:'no timestamp yet',
+      text:''
+    };
+  }
+
+  componentDidMount(){
+    api.subscribeToTimer((err,timestamp)=>this.setState({
+      timestamp
+    }));
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>
+          Here's the TextEdit component.
+        </h3>
+  
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Time:{this.state.timestamp ? new Date(this.state.timestamp).toLocaleString('en-US',{
+              weekday: 'short',
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              hour12: true,
+              timeZoneName: 'short'
+          }):'No date yet'}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  
+        <textarea row="10" cols="50" placeholder="Write something here...">
+           {this.state.text}
+        </textarea>
+  
+      </div>
+    );
+  }
+  
 }
 
 export default App;
